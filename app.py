@@ -61,7 +61,6 @@ uploaded_file = st.file_uploader(
     "Upload Expense CSV",
     type=["csv"]
 )
-
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
 st.download_button(
