@@ -20,6 +20,25 @@ st.sidebar.markdown("---")
 st.sidebar.write("Made by Srija")
 st.title("💰 Personal Finance Dashboard")
 df = pd.read_csv("expenses.csv")
+st.subheader("➕ Add New Expense")
+expense_date = st.date_input("Date")
+category = st.selectbox(
+    "Category",
+    ["Food", "Transport", "Shopping", "Entertainment", "Bills", "Other"]
+)
+amount = st.number_input(
+    "Amount (₹)",
+    min_value=0.0
+)
+if st.button("Add Expense"):
+    new_expense = pd.DataFrame({
+        "Date": [expense_date],
+        "Category": [category],
+        "Amount": [amount]
+    })
+    df = pd.concat([df, new_expense], ignore_index=True)
+    df.to_csv("expenses.csv", index=False)
+    st.success("✅ Expense Added!")
 st.write("Expense Data")
 st.dataframe(df)
 st.subheader("📈 Expense Trend")
@@ -57,12 +76,6 @@ category_expense.plot(
 )
 ax2.set_ylabel("")
 st.pyplot(fig2)
-uploaded_file = st.file_uploader(
-    "Upload Expense CSV",
-    type=["csv"]
-)
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
 st.download_button(
     "Download Data",
     df.to_csv(index=False),
